@@ -1,7 +1,5 @@
 /** app.js - Core Utilities */
 
-<script src="config.js"></script>
-
 // Check authentication
 function checkAuth() {
     const token = localStorage.getItem('authToken');

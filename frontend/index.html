@@ -42,8 +42,9 @@
         </form>
     </div>
 
-    <script src="js/app.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Unconditionally redirect if already logged in? 
@@ -76,7 +77,7 @@
                     formData.append('username', username);
                     formData.append('password', password);
 
-                    const response = await fetch('${API_BASE_URL}/auth/getToken', {
+                    const response = await fetch(`${API_BASE_URL}/auth/getToken`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

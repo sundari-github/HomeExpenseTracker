@@ -1,5 +1,4 @@
 /** dashboard.js - Dashboard & User Management Logic */
-<script src="config.js"></script>
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initial Setup and Routing Simulation

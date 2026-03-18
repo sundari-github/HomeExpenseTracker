@@ -22,9 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBtnDate = document.getElementById('filterBtnDate');
     const filterBtnCategory = document.getElementById('filterBtnCategory');
 
-    // Base API URL
-    <script src="config.js"></script>
-
     // 1. Core API Fetcher for Expenses
     async function fetchExpenses(endpoint, method = 'GET', body = null) {
         if (!checkAuth()) return null;
@@ -45,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             expenseEmptyState.style.display = 'none';
             expenseLoader.style.display = 'flex';
 
-            const response = await fetch(`${API_BASE}${endpoint}`, options);
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
 
             if (response.status === 401) {
                 window.location.href = 'index.html';
@@ -180,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await fetch(`${API_BASE}/expense/addExpense`, {
+                const response = await fetch(`${API_BASE_URL}/expense/addExpense`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -273,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmDeleteBtn.innerHTML = `<span class="spinner" style="display:inline-block; border-color:white; border-left-color:transparent; width:14px; height:14px;"></span>`;
 
                 const token = localStorage.getItem('authToken');
-                const url = `${API_BASE}/expense/deleteExpense/${encodeURIComponent(store)}/${encodeURIComponent(date)}`;
+                const url = `${API_BASE_URL}/expense/deleteExpense/${encodeURIComponent(store)}/${encodeURIComponent(date)}`;
 
                 const response = await fetch(url, {
                     method: 'DELETE',
@@ -335,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await fetch(`${API_BASE}/expense/updateExpense`, {
+                const response = await fetch(`${API_BASE_URL}/expense/updateExpense`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
