@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pydantic
+sqlalchemy
+passlib
+bcrypt==4.0.1
+# The python-multipart package is a specialized,
+# high-performance parser that allows your Python application to read and process Form Data sent over the web.
+python-multipart
+python-jose[cryptography]
+alembic
+pytest
+httpx

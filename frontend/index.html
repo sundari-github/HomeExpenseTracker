@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Home Expense Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light login-page">
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="login-container card">
+        <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to continue to Home Expense Tracker</p>
+        </div>
+        
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+            
+            <div id="loginError" class="error-message" style="display: none;"></div>
+            
+            <button type="submit" class="btn btn-primary btn-block mt-4" id="loginBtn">
+                <span class="btn-label">Sign In</span>
+                <span class="spinner" style="display: none;"></span>
+            </button>
+        </form>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Unconditionally redirect if already logged in? 
+            // We can check token presence
+            if (localStorage.getItem('authToken')) {
+                window.location.href = 'dashboard.html';
+            }
+
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Reset error state
+                loginError.style.display = 'none';
+                loginError.textContent = '';
+                
+                // Show loading state
+                loginBtn.classList.add('loading');
+                loginBtn.disabled = true;
+                
+                try {
+                    // API expects x-www-form-urlencoded for OAuth2 password bearer
+                    const formData = new URLSearchParams();
+                    formData.append('username', username);
+                    formData.append('password', password);
+
+                    const response = await fetch('http://localhost:8000/auth/getToken', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.detail || 'Authentication failed');
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Store the token
+                    localStorage.setItem('authToken', data.access_token);
+                    
+                    // Show success
+                    showToast('Successfully logged in!', 'success');
+                    
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                    
+                } catch (error) {
+                    // Display inline error
+                    loginError.textContent = error.message;
+                    loginError.style.display = 'block';
+                    
+                    // Add shake animation to form
+                    loginForm.classList.add('shake');
+                    setTimeout(() => loginForm.classList.remove('shake'), 400);
+                } finally {
+                    // Remove loading state
+                    loginBtn.classList.remove('loading');
+                    loginBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
