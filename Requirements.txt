@@ -11,3 +11,5 @@ python-jose[cryptography]
 alembic
 pytest
 httpx
+# For PostgreSQL
+psycopg2-binary 

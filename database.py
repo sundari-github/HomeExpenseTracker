@@ -1,4 +1,5 @@
 import logging
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
@@ -13,7 +14,10 @@ The breakdown:
     The ./expense.db part means "create a file named exactly expense.db in the exact same folder 
         where I am currently running this code
 '''
-SQL_ALCHEMY_DATABASE_URL = "sqlite:///./expense_app.db"
+SQL_ALCHEMY_DATABASE_URL = os.environ.get("DATABASE_URL","sqlite:///./expense_app.db")
+if SQL_ALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQL_ALCHEMY_DATABASE_URL = SQL_ALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 logger.debug(f'DB URL Set {SQL_ALCHEMY_DATABASE_URL}')
 
 '''
@@ -25,7 +29,11 @@ connect_args: This part is strictly for SQLite.
               Adding {'check_same_thread': False} tells SQLite, 
                 "Relax, FastAPI knows what it's doing, let multiple requests talk to you.
 '''
-db_engine = create_engine(SQL_ALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False}, echo=True)
+if SQL_ALCHEMY_DATABASE_URL.startswith("postgres"):
+    db_engine = create_engine(SQL_ALCHEMY_DATABASE_URL, echo=True)
+else:
+    db_engine = create_engine(SQL_ALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False}, echo=True)
+
 logger.debug("DB Engine Created")
 
 '''

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBtnCategory = document.getElementById('filterBtnCategory');
 
     // Base API URL
-    const API_BASE = 'https://home-expense-tracker-api.onrender.com';
+    <script src="config.js"></script>
 
     // 1. Core API Fetcher for Expenses
     async function fetchExpenses(endpoint, method = 'GET', body = null) {

@@ -1,4 +1,5 @@
 /** dashboard.js - Dashboard & User Management Logic */
+<script src="config.js"></script>
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initial Setup and Routing Simulation
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 2. User Management Functionality
-    
+
     // Elements
     const currentUserLoader = document.getElementById('currentUserLoader');
     const currentUserContent = document.getElementById('currentUserContent');
@@ -68,13 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // A. Load Current User
     async function loadCurrentUser() {
         if (!checkAuth()) return;
-        
+
         currentUserLoader.style.display = 'flex';
         currentUserContent.style.display = 'none';
 
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch('https://home-expense-tracker-api.onrender.com/users/getUserDetails', {
+            const response = await fetch(`${API_BASE_URL}/users/getUserDetails`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -160,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modifyUserForm) {
         modifyUserForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const btn = document.getElementById('saveProfileBtn');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<span class="spinner" style="display:inline-block; border-color:white; border-left-color:transparent; width:16px; height:16px;"></span> Saving...`;
@@ -176,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (firstName) queryParams.append('first_name', firstName);
                 if (email) queryParams.append('email_addr', email);
 
-                const response = await fetch(`https://home-expense-tracker-api.onrender.com/users/modifyUserDetails?${queryParams.toString()}`, {
+                const response = await fetch(`${API_BASE_URL}/users/modifyUserDetails?${queryParams.toString()}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -189,13 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (!response.ok) {
-                    const data = await response.json().catch(()=>({}));
+                    const data = await response.json().catch(() => ({}));
                     throw new Error(data.detail || 'Failed to update profile');
                 }
 
                 showToast('Profile updated successfully!', 'success');
                 modifyUserCard.style.display = 'none';
-                
+
                 // Reload user data to show changes
                 loadCurrentUser();
 
@@ -212,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (changePasswordForm) {
         changePasswordForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const btn = document.getElementById('savePasswordBtn');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<span class="spinner" style="display:inline-block; border-color:white; border-left-color:transparent; width:16px; height:16px;"></span> Saving...`;
@@ -228,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 queryParams.append('old_password', oldPassword);
                 queryParams.append('new_password', newPassword);
 
-                const response = await fetch(`https://home-expense-tracker-api.onrender.com/users/changeUserPassword?${queryParams.toString()}`, {
+                const response = await fetch(`${API_BASE_URL}/users/changeUserPassword?${queryParams.toString()}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -236,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.status === 401) {
-                    const data = await response.json().catch(()=>({}));
+                    const data = await response.json().catch(() => ({}));
                     // The backend returns 401 for both invalid token and wrong old password
                     // If the detail says "Invalid User" or "Old Password does not match", we shouldn't redirect
                     if (data.detail && data.detail.includes("Old Password")) {
@@ -251,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (!response.ok) {
-                    const data = await response.json().catch(()=>({}));
+                    const data = await response.json().catch(() => ({}));
                     throw new Error(data.detail || 'Failed to change password');
                 }
 
@@ -272,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (createUserForm) {
         createUserForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const btn = document.getElementById('createUserBtn');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<span class="spinner" style="display:inline-block; border-color:white; border-left-color:transparent; width:16px; height:16px;"></span> Creating...`;
@@ -280,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const token = localStorage.getItem('authToken');
-                
+
                 // Backend UserInput model expects specific PascalCase keys
                 const payload = {
                     FirstName: document.getElementById('newFirstName').value,
@@ -289,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     Password: document.getElementById('newPassword').value
                 };
 
-                const response = await fetch('https://home-expense-tracker-api.onrender.com/users/createUser', {
+                const response = await fetch(`${API_BASE_URL}/users/createUser`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -304,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (!response.ok) {
-                    const data = await response.json().catch(()=>({}));
+                    const data = await response.json().catch(() => ({}));
                     throw new Error(data.detail || 'Failed to create user');
                 }
 

@@ -12,3 +12,4 @@ venv/
 # Security & Data (CRITICAL)
 .env
 *.db
+*.log

@@ -1,5 +1,19 @@
 services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: expense_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   backend:
+    environment:
+      - DATABASE_URL=postgresql://test:test@postgres:5432/expense_app
+    depends_on:
+      - postgres
     build:
       context: .
       dockerfile: DockerFile.backend
@@ -15,3 +29,5 @@ services:
       - "3000:80"
     volumes:
       - ./frontend:/usr/share/nginx/html
+volumes:
+  postgres_data:      
