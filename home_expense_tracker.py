@@ -27,7 +27,9 @@ that tells your web browser to let the data through.
 '''
 rest_api_app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8081", "http://localhost:8080","http://localhost:3000","http://localhost:8000"],
+    allow_origins=["http://localhost:8081", "http://localhost:8080","http://localhost:3000","http://localhost:8000",
+                   "https://home-expense-tracker-ui.onrender.com"
+                  ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
