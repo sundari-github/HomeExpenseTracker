@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBtnCategory = document.getElementById('filterBtnCategory');
 
     // Base API URL
-    const API_BASE = 'http://localhost:8000';
+    const API_BASE = 'https://home-expense-tracker-api.onrender.com';
 
     // 1. Core API Fetcher for Expenses
     async function fetchExpenses(endpoint, method = 'GET', body = null) {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            
+
             // Render the data
             if (data && data.length > 0) {
                 renderExpenseTable(data);
@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
         expenseTableBody.innerHTML = '';
         expenses.forEach(exp => {
             const tr = document.createElement('tr');
-            
+
             // Date formatting
             const dateStr = exp.PurchaseDate ? exp.PurchaseDate : exp.Date; // Fallback
-            
+
             tr.innerHTML = `
                 <td>${dateStr}</td>
                 <td>${exp.Store}</td>
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Filter Modals
     const filterDateModal = document.getElementById('filterDateModal');
     const filterCategoryModal = document.getElementById('filterCategoryModal');
-    
+
     // Close Filter Modals
     document.querySelectorAll('.cancel-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (filterBtnCategory) filterBtnCategory.addEventListener('click', () => switchFilterTab(filterBtnCategory));
 
     // 4. Form Submissions
-    
+
     // Add Expense
     if (addExpenseForm) {
         addExpenseForm.addEventListener('submit', async (e) => {
@@ -190,15 +190,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.status === 401) return window.location.href = 'index.html';
-                
+
                 if (!response.ok) {
-                    const data = await response.json().catch(()=>({}));
+                    const data = await response.json().catch(() => ({}));
                     throw new Error(data.detail || 'Failed to add expense');
                 }
 
                 showToast('Expense added successfully!', 'success');
                 addExpenseForm.reset();
-                
+
                 // Refresh table and force switch to "All" filter
                 switchFilterTab(filterBtnAll);
 
@@ -218,11 +218,11 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const start = document.getElementById('filterStartDate').value;
             const end = document.getElementById('filterEndDate').value;
-            
+
             [filterBtnAll, filterBtnDate, filterBtnCategory].forEach(btn => btn.classList.remove('active-filter'));
             filterBtnDate.classList.add('active-filter');
             filterDateModal.style.display = 'none';
-            
+
             fetchExpenses(`/expense/getExpensesByDate/${start}/${end}`);
         });
     }
@@ -234,11 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const categoryName = document.getElementById('filterCategoryName').value;
             const categoryValue = document.getElementById('filterCategoryValue').value;
-            
+
             [filterBtnAll, filterBtnDate, filterBtnCategory].forEach(btn => btn.classList.remove('active-filter'));
             filterBtnCategory.classList.add('active-filter');
             filterCategoryModal.style.display = 'none';
-            
+
             const params = new URLSearchParams({
                 category_name: categoryName,
                 category_value: categoryValue
@@ -274,14 +274,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const token = localStorage.getItem('authToken');
                 const url = `${API_BASE}/expense/deleteExpense/${encodeURIComponent(store)}/${encodeURIComponent(date)}`;
-                
+
                 const response = await fetch(url, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 if (response.status === 401) return window.location.href = 'index.html';
-                
+
                 if (!response.ok) {
                     let errorMsg = 'Failed to delete expense';
                     if (response.status === 404) {
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else if (response.status === 422) {
                         errorMsg = 'Invalid date format sent to server.';
                     } else {
-                        const data = await response.json().catch(()=>({}));
+                        const data = await response.json().catch(() => ({}));
                         if (data.detail && typeof data.detail === 'string') {
                             errorMsg = data.detail;
                         }
@@ -345,15 +345,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.status === 401) return window.location.href = 'index.html';
-                
+
                 if (!response.ok) {
-                    const data = await response.json().catch(()=>({}));
+                    const data = await response.json().catch(() => ({}));
                     throw new Error(data.detail || 'Failed to update expense');
                 }
 
                 showToast('Expense updated successfully!', 'success');
                 editExpenseModal.style.display = 'none';
-                
+
                 // Resubmit active filter to refresh
                 refreshActiveView();
 
@@ -372,11 +372,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (filterBtnDate.classList.contains('active-filter')) {
             const start = document.getElementById('filterStartDate').value;
             const end = document.getElementById('filterEndDate').value;
-            if(start && end) fetchExpenses(`/expense/getExpensesByDate/${start}/${end}`);
+            if (start && end) fetchExpenses(`/expense/getExpensesByDate/${start}/${end}`);
         } else if (filterBtnCategory.classList.contains('active-filter')) {
             const catName = document.getElementById('filterCategoryName').value;
             const catVal = document.getElementById('filterCategoryValue').value;
-            if(catVal) fetchExpenses(`/expense/getExpenses?category_name=${catName}&category_value=${catVal}`);
+            if (catVal) fetchExpenses(`/expense/getExpenses?category_name=${catName}&category_value=${catVal}`);
         }
     }
 
@@ -395,9 +395,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 5. Update & Delete Action Handlers (Global Inline Binding - Moved Outside DOMContentLoaded)
-window.editExpenseRow = function(btn, event) {
-    if(event) event.preventDefault();
-    
+window.editExpenseRow = function (btn, event) {
+    if (event) event.preventDefault();
+
     const { date, store, amount, card } = btn.dataset;
     document.getElementById('editExpDate').value = date;
     document.getElementById('editExpStore').value = store;
@@ -406,23 +406,23 @@ window.editExpenseRow = function(btn, event) {
     document.getElementById('editExpenseModal').style.display = 'flex';
 };
 
-window.deleteExpenseRow = function(btn, event) {
-    if(event) event.preventDefault();
-    
+window.deleteExpenseRow = function (btn, event) {
+    if (event) event.preventDefault();
+
     // Stop event bubbling in case icons swallow the click
-    if(event) event.stopPropagation();
+    if (event) event.stopPropagation();
 
     const { date, store } = btn.dataset;
-    
+
     console.log("Delete triggered globally for:", store, date);
-    
+
     // Store target globally for the modal to use
     window.expenseToDeleteStore = store;
     window.expenseToDeleteDate = date;
-    
+
     document.getElementById('deleteConfirmText').textContent = `Are you sure you want to delete the expense at ${store} on ${date}?`;
     document.getElementById('deleteConfirmModal').style.display = 'flex';
-    
+
     // Reset modal button state in case of previous errors
     const confirmBtn = document.getElementById('confirmDeleteBtn');
     confirmBtn.disabled = false;

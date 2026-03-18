@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch('http://localhost:8000/users/getUserDetails', {
+            const response = await fetch('https://home-expense-tracker-api.onrender.com/users/getUserDetails', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (firstName) queryParams.append('first_name', firstName);
                 if (email) queryParams.append('email_addr', email);
 
-                const response = await fetch(`http://localhost:8000/users/modifyUserDetails?${queryParams.toString()}`, {
+                const response = await fetch(`https://home-expense-tracker-api.onrender.com/users/modifyUserDetails?${queryParams.toString()}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 queryParams.append('old_password', oldPassword);
                 queryParams.append('new_password', newPassword);
 
-                const response = await fetch(`http://localhost:8000/users/changeUserPassword?${queryParams.toString()}`, {
+                const response = await fetch(`https://home-expense-tracker-api.onrender.com/users/changeUserPassword?${queryParams.toString()}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     Password: document.getElementById('newPassword').value
                 };
 
-                const response = await fetch('http://localhost:8000/users/createUser', {
+                const response = await fetch('https://home-expense-tracker-api.onrender.com/users/createUser', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,

@@ -33,8 +33,8 @@ async function apiCall(endpoint, options = {}) {
     };
 
     try {
-        const response = await fetch(`http://localhost:8000${endpoint}`, mergedOptions);
-        
+        const response = await fetch(`https://home-expense-tracker-api.onrender.com${endpoint}`, mergedOptions);
+
         // Handle 401 Unauthorized globally
         if (response.status === 401) {
             localStorage.removeItem('authToken');
@@ -43,11 +43,11 @@ async function apiCall(endpoint, options = {}) {
         }
 
         const data = await response.json().catch(() => ({}));
-        
+
         if (!response.ok) {
             throw new Error(data.detail || `Error: ${response.status}`);
         }
-        
+
         return data;
 
     } catch (error) {
@@ -68,7 +68,7 @@ function showToast(message, type = 'success') {
     toast.id = toastId;
 
     // Icons
-    const iconStr = type === 'success' 
+    const iconStr = type === 'success'
         ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
         : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-circle"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         const isDropdownBtn = e.target.closest('#userMenuBtn');
         const userMenu = document.getElementById('userMenu');
-        
+
         if (isDropdownBtn && userMenu) {
             userMenu.classList.toggle('show');
         } else if (userMenu) {
