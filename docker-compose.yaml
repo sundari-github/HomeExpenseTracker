@@ -1,0 +1,17 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: DockerFile.backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/home-expense-tracker-app
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: DockerFile.frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html

@@ -1,0 +1,8 @@
+# 1. The Environment: A tiny version of Linux that already has Nginx running
+FROM nginx:alpine
+
+# 2. The Code: Copy your frontend folder into Nginx's default public folder
+COPY . /usr/share/nginx/html
+
+# 3. Drill the hole: Nginx serves websites on port 80 by default
+EXPOSE 80

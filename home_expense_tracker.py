@@ -14,9 +14,20 @@ from router import expenses, users, auth
 
 rest_api_app = FastAPI(title="Home Expense Tracker")
 
+'''
+To a web browser, an "Origin" consists of three strict parts:
+The Protocol (http:// vs https://)
+The Domain (localhost vs google.com)
+The Port (:8081, :3000, :8000)
+If any of those three things are different between your UI and your API, 
+the browser considers it a "Cross-Origin" request.
+CORS - Cross-Origin Resource Sharing
+By adding this, FastAPI will automatically attach a special hidden header to every response 
+that tells your web browser to let the data through.
+'''
 rest_api_app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8081", "http://localhost:8080"],
+    allow_origins=["http://localhost:8081", "http://localhost:8080","http://localhost:3000","http://localhost:8000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

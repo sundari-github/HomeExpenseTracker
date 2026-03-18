@@ -1,0 +1,15 @@
+FROM python:3.10-slim
+
+# Sets the working directory for the subsequent commands
+WORKDIR /home-expense-tracker-app 
+
+COPY Requirements.txt .
+RUN pip install --no-cache-dir -r Requirements.txt
+
+COPY . /home-expense-tracker-app
+
+# Exposes the port 8000 to the outside world
+EXPOSE 8000 
+
+# To tell the container to accept connections from the outside world, we must set the host to 0.0.0.0.
+CMD ["uvicorn", "home_expense_tracker:rest_api_app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -1,0 +1,6 @@
+frontend/
+venv/
+__pycache__/
+.idea/
+.pytest_cache/
+router/__pycache__/
