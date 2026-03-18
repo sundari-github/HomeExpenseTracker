@@ -48,7 +48,7 @@ class ExpenseApiInput(BaseModel):
     Amount: Decimal = Field(gt=0, decimal_places=2,
                             description="Should be a positive number with maximum 2 decimal places")
     Store: str = Field(min_length=1, description="Should be a non empty string")
-    Card: Literal["Amex", "Visa", "Mastercard", "Discover"]
+    Card: Literal["Amex", "Visa", "Mastercard", "Discover","HSA"]
 
     # noinspection PyNestedDecorators
     @field_validator('Store')
