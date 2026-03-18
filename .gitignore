@@ -1,7 +1,14 @@
-# Default ignored files
+# IDE and Caches
 /shelf/
 /workspace.xml
 .idea/
 .pytest_cache/
 __pycache__/
 router/__pycache__/
+
+# Environments
+venv/
+
+# Security & Data (CRITICAL)
+.env
+*.db
