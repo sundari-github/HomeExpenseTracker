@@ -1,0 +1,43 @@
+name: Test and Deploy Backend
+
+# 1. When should this run? Every time you push to the main branch.
+on:
+  push:
+    branches:
+      - main  # Change to 'master' if your default branch is named master
+
+jobs:
+  # JOB 1: Run the Pytest Suite
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.4' # Match your local version
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest  # Ensure pytest is installed
+
+      - name: Run Pytest
+        # If your tests require a DATABASE_URL to run without crashing, 
+        # you can pass a temporary SQLite one here just for the tests!
+        env:
+          DATABASE_URL: sqlite:///./test.db 
+        run: |
+          pytest
+
+  # JOB 2: Tell Render to Deploy (Only if JOB 1 passes)
+  deploy-to-render:
+    needs: test-backend  # This is the magic gate! It waits for 'test-backend' to pass.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy
+        # We use a simple curl command to ping that secret URL
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
