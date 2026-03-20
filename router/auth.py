@@ -1,5 +1,5 @@
 import datetime
-from datetime import timedelta
+from datetime import timedelta 
 from fastapi import APIRouter, Depends, HTTPException
 import logging
 from typing import Annotated
@@ -92,7 +92,7 @@ the token.
 @auth_end_point.post("/getToken", summary="Returns the token for authorization", status_code=status.HTTP_200_OK)
 async def get_token(db_session: db_dependency, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     logger.debug("Inside Authenticate user method")
-    db_rows = db_session.query(User).filter(form_data.username == User.UserName).first()
+    db_rows = db_session.query(User).filter(User.UserName == form_data.username).first()
     if not db_rows:
         raise HTTPException(status_code=401, detail="Unauthorized access. Invalid User")
     logger.debug(f"UserName valid {db_rows.ID} {db_rows.UserName}")
@@ -100,6 +100,6 @@ async def get_token(db_session: db_dependency, form_data: Annotated[OAuth2Passwo
     if not is_passwd_valid:
         raise HTTPException(status_code=401, detail="Unauthorized access. Invalid Password")
     logger.debug(f"Password valid")
-    token = create_access_token(db_rows.ID, db_rows.UserName, timedelta(minutes=20))
+    token = create_access_token(str(db_rows.ID), str(db_rows.UserName), timedelta(minutes=20))
 
     return {"access_token": token, "token_type": "bearer"}

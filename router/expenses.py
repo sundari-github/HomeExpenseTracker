@@ -48,7 +48,7 @@ class ExpenseApiInput(BaseModel):
     Amount: Decimal = Field(gt=0, decimal_places=2,
                             description="Should be a positive number with maximum 2 decimal places")
     Store: str = Field(min_length=1, description="Should be a non empty string")
-    Card: Literal["Amex", "Visa", "Mastercard", "Discover","HSA"]
+    Card: Literal["Amex", "Visa", "Mastercard", "Discover", "HSA"]
 
     # noinspection PyNestedDecorators
     @field_validator('Store')
@@ -221,7 +221,7 @@ async def update_expense(user_info: user_dependency, db_rows: db_dependency, inp
     #     raise HTTPException(status_code=404, detail="No matching expense found for updates")
     matching_rows = db_rows.query(Expense).filter(Expense.UserID == int(user_info.get("ID")),
                                                   input_expense.PurchaseDate == Expense.PurchaseDate,
-                                                  input_expense.Store == Expense.Store).all()
+                                                  input_expense.Store == Expense.Store).all()                                                  
     if not matching_rows:
         raise HTTPException(status_code=404, detail="No matching expense found for updates")
     for expense in matching_rows:

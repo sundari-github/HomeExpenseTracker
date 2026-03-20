@@ -32,7 +32,7 @@ def test_01_get_expenses_by_date(client, seed_expenses, from_date, to_date, expe
                          ]
                          )
 def test_02_get_expenses_by_category(client, seed_expenses, category_name, category_value, expected_status,
-                                  expected_len):
+                                     expected_len):
     r = client.get(f"/expense/getExpenses?category_name={category_name}&category_value={category_value}")
     assert r.status_code == expected_status
     if expected_status == status.HTTP_200_OK:
