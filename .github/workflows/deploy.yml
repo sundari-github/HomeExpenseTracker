@@ -4,7 +4,7 @@ name: Test and Deploy Backend
 on:
   push:
     branches:
-      - main  # Change to 'master' if your default branch is named master
+      - master  # Change to 'master' if your default branch is named master
 
 jobs:
   # JOB 1: Run the Pytest Suite
